@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import CanvasComponent from '../components/CanvasComponent'
+import GameStats from '../components/GameStats'
 
 class GameContainer extends Component {
 
   state = {
     boardSize: window.visualViewport.width / 2,
+    playerSize: 50,
     finished: false,
     score: 0,
     timeElapsed: 0,
@@ -35,7 +37,8 @@ class GameContainer extends Component {
 
   updateGame = () => {
     this.setState((state) => ({
-      timeElapsed: state.timeElapsed + 1
+      timeElapsed: state.timeElapsed + 1,
+      score: state.score + 10
     }));
   }
 
@@ -43,8 +46,8 @@ class GameContainer extends Component {
     const { x, y } = this.state.positions.player
     console.log("Horiz Pos: ", x)
     console.log("Vert Pos: ", y)
-    const { boardSize } = this.state.boardSize
-    console.log("Board Size: ", boardSize)
+    const { boardSize, playerSize } = this.state
+
 
     switch (e.key) {
       case "ArrowUp":
@@ -62,7 +65,7 @@ class GameContainer extends Component {
         }
         break;
       case "ArrowDown":
-        if (y === boardSize) {
+        if (y >= boardSize - playerSize) {
           return;
         } else {
           this.setState({
@@ -76,7 +79,7 @@ class GameContainer extends Component {
         }
         break;
       case "ArrowLeft":
-        if (x === 0) {
+        if (x < boardSize / 2) {
           return;
         } else {
           this.setState({
@@ -90,7 +93,7 @@ class GameContainer extends Component {
         }
         break;
       case "ArrowRight":
-        if (x === boardSize) {
+        if (x > (boardSize * 1.5 - playerSize)) {
           return;
         } else {
           this.setState({
@@ -110,13 +113,11 @@ class GameContainer extends Component {
   }
 
   render() {
-    const { boardSize, timeElapsed, positions } = this.state
+    const { playerSize, score, boardSize, timeElapsed, positions } = this.state
     return (
       <div className="GameContainer" >
-        <CanvasComponent boardSize={boardSize} time={timeElapsed} playerPosition={positions.player} handlePlayerMovement={this.handlePlayerMovement} />
-        <div className="timer" style={{backgroundColor: "black", color: "yellow", width: boardSize, margin: 'auto', fontWeight: 'bold'}}>
-          TIMER: {timeElapsed}...
-        </div>
+        <CanvasComponent boardSize={boardSize} time={timeElapsed} playerPosition={positions.player} playerSize={playerSize} handlePlayerMovement={this.handlePlayerMovement} />
+        <GameStats score={score} timeElapsed={timeElapsed} />
       </div>
     )
   }
