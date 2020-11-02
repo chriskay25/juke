@@ -5,15 +5,15 @@ import GameStats from '../components/GameStats'
 class GameContainer extends Component {
 
   state = {
-    boardSize: window.visualViewport.width / 2,
-    playerSize: 50,
+    boardSize: this.props.boardSize,
+    playerSize: this.props.playerSize,
     finished: false,
     score: 0,
     timeElapsed: 0,
     positions: {
       player: {
-        x: window.visualViewport.width / 2,
-        y: 50
+        x: (this.props.boardSize / 2) - (this.props.playerSize / 2),
+        y: (this.props.boardSize / 2) - (this.props.playerSize / 2)
       },
       enemy: {
         x: 0,
@@ -51,7 +51,7 @@ class GameContainer extends Component {
 
     switch (e.key) {
       case "ArrowUp":
-        if (y === 0) {
+        if (y <= 0) {
           return;
         } else {
           this.setState({
@@ -65,7 +65,7 @@ class GameContainer extends Component {
         }
         break;
       case "ArrowDown":
-        if (y >= boardSize - playerSize) {
+        if (y > boardSize - playerSize) {
           return;
         } else {
           this.setState({
@@ -79,7 +79,7 @@ class GameContainer extends Component {
         }
         break;
       case "ArrowLeft":
-        if (x < boardSize / 2) {
+        if (x < 0) {
           return;
         } else {
           this.setState({
@@ -93,7 +93,7 @@ class GameContainer extends Component {
         }
         break;
       case "ArrowRight":
-        if (x > (boardSize * 1.5 - playerSize)) {
+        if (x > (boardSize - playerSize)) {
           return;
         } else {
           this.setState({

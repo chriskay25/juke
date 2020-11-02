@@ -12,6 +12,7 @@ class CanvasComponent extends Component {
 
   style = () => {
     return {
+      position: 'relative',
       width: `${this.state.boardSize}px`,
       height: `${this.state.boardSize}px`,
       margin: '0 auto',
