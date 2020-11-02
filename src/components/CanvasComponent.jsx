@@ -20,9 +20,10 @@ class CanvasComponent extends Component {
   }
 
   render() {
+    const { playerPosition, playerSize, handlePlayerMovement } = this.props
     return (
       <div className="CanvasComponent" style={this.style()}>
-        <PlayerComponent playerPosition={this.props.playerPosition} handlePlayerMovement={this.props.handlePlayerMovement} />
+        <PlayerComponent playerPosition={playerPosition} playerSize={playerSize} handlePlayerMovement={handlePlayerMovement} />
       </div>
     )
   }
