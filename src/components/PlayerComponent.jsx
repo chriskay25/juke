@@ -5,10 +5,12 @@ class PlayerComponent extends Component {
   
   style = (props) => {
     const { x, y } = this.props.playerPosition
+    const { playerSize } = this.props
     return {
       position: 'absolute',
       left: `${x}px`,
-      top: `${y}px`
+      top: `${y}px`,
+      width: playerSize
     }
   }
   
