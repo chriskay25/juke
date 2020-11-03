@@ -4,22 +4,32 @@ import GameStats from '../components/GameStats'
 
 class GameContainer extends Component {
 
-  state = {
-    boardSize: this.props.boardSize,
-    playerSize: this.props.playerSize,
-    finished: false,
-    score: 0,
-    timeElapsed: 0,
-    positions: {
-      player: {
-        x: (this.props.boardSize / 2) - (this.props.playerSize / 2),
-        y: (this.props.boardSize / 2) - (this.props.playerSize / 2)
-      },
-      enemy: {
-        x: 0,
-        y: 0
+  constructor(props) {
+    super(props)
+    const { boardSize, playerSize } = this.props
+    this.state = {
+      boardSize: boardSize,
+      playerSize: playerSize,
+      finished: false,
+      score: 0,
+      timeElapsed: 0,
+      onScreenEnemies: 1,
+      enemies: [],
+      positions: {
+        player: {
+          x: (boardSize / 2) - (playerSize / 2),
+          y: (boardSize / 2) - (playerSize / 2)
+        },
+        enemy: {
+          x: 0,
+          y: 0
+        }
       }
     }
+  }
+
+  createNewEnemy = () => {
+    
   }
 
   componentDidMount() {
@@ -35,7 +45,7 @@ class GameContainer extends Component {
     this.timeInterval = setInterval(this.updateGame, 1000) // starts timer
   }
 
-  updateGame = () => {
+  updateGame = () => {  // Had to include state below, why doesn't this work without it?
     this.setState((state) => ({
       timeElapsed: state.timeElapsed + 1,
       score: state.score + 10
@@ -115,7 +125,7 @@ class GameContainer extends Component {
   render() {
     const { playerSize, score, boardSize, timeElapsed, positions } = this.state
     return (
-      <div className="GameContainer" >
+      <div className="GameContainer" maxWidth='600px'>
         <CanvasComponent boardSize={boardSize} time={timeElapsed} playerPosition={positions.player} playerSize={playerSize} handlePlayerMovement={this.handlePlayerMovement} />
         <GameStats score={score} timeElapsed={timeElapsed} />
       </div>
