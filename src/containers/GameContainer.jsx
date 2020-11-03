@@ -14,22 +14,55 @@ class GameContainer extends Component {
       score: 0,
       timeElapsed: 0,
       onScreenEnemies: 1,
-      enemies: [],
       positions: {
         player: {
           x: (boardSize / 2) - (playerSize / 2),
           y: (boardSize / 2) - (playerSize / 2)
         },
-        enemy: {
-          x: 0,
-          y: 0
-        }
+        enemies: [],
       }
     }
   }
 
+  randomSide = (min, max) => {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+
   createNewEnemy = () => {
-    
+    const { player } = this.state.positions
+    const { boardSize, playerSize } = this.state
+    let newEnemy;
+
+    this.setState({
+      onScreenEnemies: this.state.onScreenEnemies + 1
+    })
+
+    switch(this.randomSide(1, 4)) {
+      case 1:  // Left
+        newEnemy = { key: this.state.onScreenEnemies, x: 0, y: player.y }
+        break;
+      case 2:  // Up
+        newEnemy = { key: this.state.onScreenEnemies, x: player.x, y: 0 }
+        break;
+      case 3:  // Right
+        newEnemy = { key: this.state.onScreenEnemies, x: boardSize, y: player.y }
+        break;
+      case 4:  // Down
+        newEnemy = { key: this.state.onScreenEnemies, x: player.x, y: boardSize }
+        break;
+      default:
+        return;
+    }
+
+    this.setState({
+      positions: {
+        ...this.state.positions,
+        enemies: [...this.state.positions.enemies].concat(newEnemy)
+      }
+    })
+
   }
 
   componentDidMount() {
@@ -54,8 +87,6 @@ class GameContainer extends Component {
 
   handlePlayerMovement = (e) => {
     const { x, y } = this.state.positions.player
-    console.log("Horiz Pos: ", x)
-    console.log("Vert Pos: ", y)
     const { boardSize, playerSize } = this.state
 
 
@@ -125,7 +156,7 @@ class GameContainer extends Component {
   render() {
     const { playerSize, score, boardSize, timeElapsed, positions } = this.state
     return (
-      <div className="GameContainer" maxWidth='600px'>
+      <div className="GameContainer">
         <CanvasComponent boardSize={boardSize} time={timeElapsed} playerPosition={positions.player} playerSize={playerSize} handlePlayerMovement={this.handlePlayerMovement} />
         <GameStats score={score} timeElapsed={timeElapsed} />
       </div>
