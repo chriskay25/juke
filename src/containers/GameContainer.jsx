@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import CanvasComponent from '../components/CanvasComponent'
 import GameStats from '../components/GameStats'
+import PlayerComponent from '../components/PlayerComponent'
+import EnemyComponent from '../components/EnemyComponent'
 
 class GameContainer extends Component {
 
@@ -157,7 +159,10 @@ class GameContainer extends Component {
     const { playerSize, score, boardSize, timeElapsed, positions } = this.state
     return (
       <div className="GameContainer">
-        <CanvasComponent boardSize={boardSize} time={timeElapsed} playerPosition={positions.player} playerSize={playerSize} handlePlayerMovement={this.handlePlayerMovement} />
+        <CanvasComponent boardSize={boardSize}>
+          <PlayerComponent playerPosition={positions.player} playerSize={playerSize} handlePlayerMovement={this.handlePlayerMovement} />
+          <EnemyComponent />
+        </CanvasComponent>
         <GameStats score={score} timeElapsed={timeElapsed} />
       </div>
     )
