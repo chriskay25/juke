@@ -10,7 +10,7 @@ class PlayerComponent extends Component {
       position: 'absolute',
       left: `${x}px`,
       top: `${y}px`,
-      width: playerSize
+      width: `${playerSize}px`,
     }
   }
   
@@ -20,6 +20,9 @@ class PlayerComponent extends Component {
     )
   }
 
+  componentDidMount() {
+    window.onkeydown = this.props.handlePlayerMovement;
+  }
 }
 
 export default PlayerComponent
