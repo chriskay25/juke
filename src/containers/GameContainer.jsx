@@ -3,6 +3,7 @@ import CanvasComponent from '../components/CanvasComponent'
 import GameStats from '../components/GameStats'
 import PlayerComponent from '../components/PlayerComponent'
 import EnemyComponent from '../components/EnemyComponent'
+import Instructions from '../components/Instructions'
 
 class GameContainer extends Component {
 
@@ -15,8 +16,7 @@ class GameContainer extends Component {
       finished: false,
       score: 0,
       timeElapsed: 0,
-      onScreenEnemies: 0,
-      speed: 8,
+      speed: 5,
       positions: {
         player: {
           x: (boardSize / 2) - (playerSize / 2),
@@ -37,10 +37,6 @@ class GameContainer extends Component {
     const { player } = this.state.positions
     const { boardSize, playerSize } = this.state
     let newEnemy;
-
-    this.setState({
-      onScreenEnemies: this.state.onScreenEnemies + 1
-    })
 
     switch(this.randomSide(1, 4)) {
       case 1:  // Left
@@ -102,22 +98,12 @@ class GameContainer extends Component {
     })
   }
 
-  componentDidMount() {
-    this.startGame()
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timeInterval)
-    clearInterval(this.enemyInterval)
-    clearInterval(this.enemyCreationInterval)
-  }
-
   startGame = () => {
     console.log("Game Started!")
     this.createNewEnemy()
     this.timeInterval = setInterval(this.updateGame, 1000) // starts timer
     this.enemyInterval = setInterval(this.updateEnemyPositions, 50)
-    this.enemyCreationInterval = setInterval(this.createNewEnemy, 5000)
+    this.enemyCreationInterval = setInterval(this.createNewEnemy, 2000)
   }
 
   updateGame = () => {  // Had to include state below, why doesn't this work without it?
@@ -130,6 +116,7 @@ class GameContainer extends Component {
   gameOver = () => {
     console.log("Game Over")
     this.setState({
+      score: 0,
       positions: {
         ...this.state.positions,
         enemies: []
@@ -213,6 +200,7 @@ class GameContainer extends Component {
     const { playerSize, score, boardSize, timeElapsed, positions } = this.state
     return (
       <div className="GameContainer">
+        <Instructions />
         <CanvasComponent boardSize={boardSize}>
           <PlayerComponent playerPosition={positions.player} playerSize={playerSize} handlePlayerMovement={this.handlePlayerMovement} />
           {this.state.positions.enemies.map(enemy =>
@@ -229,6 +217,18 @@ class GameContainer extends Component {
       </div>
     )
   }
+
+  componentDidMount() {
+    this.startGame()
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timeInterval)
+    clearInterval(this.enemyInterval)
+    clearInterval(this.enemyCreationInterval)
+  }
 }
+
+
 
 export default GameContainer
